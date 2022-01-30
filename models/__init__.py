@@ -4,6 +4,7 @@ from .simclr import SimCLR
 from torchvision.models import resnet50, resnet18
 import torch
 from .backbones import resnet18_cifar_variant1, resnet18_cifar_variant2
+from res12 import Res12
 
 def get_backbone(backbone, castrate=True):
     backbone = eval(f"{backbone}()")
@@ -18,12 +19,14 @@ def get_backbone(backbone, castrate=True):
 def get_model(model_cfg):    
 
     if model_cfg.name == 'simsiam':
-        model =  SimSiam(get_backbone(model_cfg.backbone))
+        # model =  SimSiam(get_backbone(model_cfg.backbone))
+        model = SimSiam(Res12(keep_prob=1.0, avg_pool=True))
         if model_cfg.proj_layers is not None:
             model.projector.set_layers(model_cfg.proj_layers)
 
     elif model_cfg.name == 'byol':
-        model = BYOL(get_backbone(model_cfg.backbone))
+        # model = BYOL(get_backbone(model_cfg.backbone))
+        model = BYOL(Res12(keep_prob=1.0, avg_pool=True))
     elif model_cfg.name == 'simclr':
         model = SimCLR(get_backbone(model_cfg.backbone))
     elif model_cfg.name == 'swav':

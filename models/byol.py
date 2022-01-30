@@ -64,7 +64,8 @@ class BYOL(nn.Module):
         super().__init__()
 
         self.backbone = backbone
-        self.projector = MLP(backbone.output_dim)
+        # self.projector = MLP(backbone.output_dim)
+        self.projector = MLP(640)
         self.online_encoder = nn.Sequential(
             self.backbone,
             self.projector
